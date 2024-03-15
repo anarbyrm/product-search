@@ -13,7 +13,8 @@ const getProducts = async (req, res, next) => {
             minPrice, 
             maxPrice,
             minRating,
-            maxRating
+            maxRating,
+            category
         } = req.query;
 
         let query = Product.find();
@@ -68,6 +69,10 @@ const getProducts = async (req, res, next) => {
             if (!filters.rating) filters.rating = {};
  
             filters.rating = { ...filters.rating, $gte: minRating};
+        }
+
+        if (category) {
+            filters.category = category.trim();
         }
 
         query = query.find(filters);
