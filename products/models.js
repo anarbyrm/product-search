@@ -20,7 +20,11 @@ const productSchema = new mongoose.Schema({
     },
     barcode: {
         type: String,
-        required: true
+        required: true,
+        validate: {
+            validator: (value) => value.length === 13,
+            message: "Barcode must be 13 characters"
+        }
     },
     rating: {
         type: Number
@@ -39,7 +43,7 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     }
-})
+}, { timestamps: true })
 
 // create model
 const Product = mongoose.model('Product', productSchema);
