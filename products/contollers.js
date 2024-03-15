@@ -1,4 +1,4 @@
-getProducts = (req, res, next) => {
+const getProducts = (req, res, next) => {
     try{
 
         res.json({
@@ -11,7 +11,7 @@ getProducts = (req, res, next) => {
     }
 }
 
-exportProducts = (req, res, next) => {
+const exportProducts = (req, res, next) => {
     try {
         res.send("products.xml exported");
     } catch (err) {
