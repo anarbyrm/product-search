@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 
 const productRoutes = require('./products/routes');
 const connectDB = require('./utils/db');
+const { errorHandler } = require('./utils/error');
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use('/api/v1', productRoutes);
 
+app.use(errorHandler);
 
 connectDB(process.env.MONGO_DB_URI)
     .then(() => {
