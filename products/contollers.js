@@ -1,6 +1,6 @@
 const getProducts = (req, res, next) => {
     try{
-
+        
         res.json({
             status: 'success',
             data: []

@@ -13,9 +13,8 @@ const PORT = process.env.PORT || 5000;
 app.use('/api/v1', productRoutes);
 
 
-connectDB()
+connectDB(process.env.MONGO_DB_URI)
     .then(() => {
-        console.log("database is up.\n");
         app.listen(PORT, () => {
             console.log("Server is up and running...");
         })
