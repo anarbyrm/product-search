@@ -1,10 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 const productRoutes = require('./products/routes');
 const connectDB = require('./utils/db');
 const { errorHandler } = require('./utils/error');
-const swaggerDocs = require('./utils/swagger');
+const swaggerDocs = require('./doc/swagger');
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+app.use(cors());
 app.use(express.json());
 app.use('/api/v1/products', productRoutes);
 

@@ -1,0 +1,180 @@
+swagger: "2.0"
+info:
+  title: Product search API
+  version: 1.0
+  contact:
+    email: anar.bayram@yahoo.com
+  servers:
+    - url: http://localhost:5050
+      description: Development server
+paths:
+  /api/v1/products:
+    get:
+      summary: Products list
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Value to be searched among products
+        - in: query
+          name: stock
+          schema:
+            type: boolean
+          description: Stock value
+        - in: query
+          name: available
+          schema:
+            type: boolean
+          description: Availablity value
+        - in: query
+          name: tags
+          schema:
+            type: string
+          description: Tags comma seperated
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Category value
+        - in: query
+          name: minPrice
+          schema:
+            type: integer
+          description: Minimum value for price to be filtered
+        - in: query
+          name: maxPrice
+          schema:
+            type: integer
+          description: Maximum value for price to be filtered
+        - in: query
+          name: minRating
+          schema:
+            type: integer
+          description: Minimum value for rating to be filtered
+        - in: query
+          name: maxRating
+          schema:
+            type: integer
+          description: Maximum value for rating to be filtered
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              total:
+                type: integer
+              data: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                        type: string
+                    title:
+                        type: string
+                    description:
+                        type: string
+                    price:
+                        type: number
+                    sku:
+                        type: string
+                    barcode:
+                        type: string
+                    rating:
+                        type: number
+                    tags:
+                        type: array
+                        items:
+                          type: string
+                    category:
+                        type: string
+                    isAvailable:
+                        type: boolean
+                    inStock:
+                        type: boolean
+                    __v:
+                        type: integer
+        500:
+          description: Server Error
+          schema:
+              type: object
+              properties:
+                  status:
+                      type: string
+                  detail:
+                      type: string    
+        400:
+          description: Bad request
+          schema:
+              type: object
+              properties:
+                  status:
+                      type: string
+                  detail:
+                      type: string
+
+  /api/v1/products/export:
+    post:
+      summary: Product export
+      consumes:
+        - application/json
+      produces:
+        - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              q:
+                type: string
+              stock:
+                type: boolean
+              available:
+                type: boolean
+              tags:
+                type: string
+                description: comma separated string values
+              category:
+                type: string
+              minPrice:
+                type: number
+              maxPrice:
+                type: number
+              minRating:
+                type: number
+              maxRating:
+                type: number
+      responses:
+        200:
+          description: Success
+          schema:
+              type: string
+              format: binary
+              description: Spreadsheet file in binary format
+        400:
+          description: Bad request
+          schema:
+              type: object
+              properties:
+                  status:
+                      type: string
+                  detail:
+                      type: string
+        404:
+          description: Not Found
+          schema:
+              type: object
+              properties:
+                  status:
+                      type: string
+                  detail:
+                      type: string
