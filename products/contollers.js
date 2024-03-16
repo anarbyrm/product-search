@@ -1,3 +1,4 @@
+const { generateExcelFile } = require("../utils/excel");
 const Product = require("./models");
 
 const getProducts = async (req, res, next) => {
@@ -92,7 +93,7 @@ const getProducts = async (req, res, next) => {
         // fetch products based on seach and filters
         const products = await query.exec();
 
-        res.json({
+        res.status(200).json({
             status: 'success',
             total: products.length,
             data: products
@@ -103,9 +104,26 @@ const getProducts = async (req, res, next) => {
     }
 }
 
-const exportProducts = (req, res, next) => {
+const exportProducts = async (req, res, next) => {
     try {
-        res.send("products.xml exported");
+
+        const searchFilters = req.body;
+
+        const products = await Product.find(searchFilters);
+
+        if (products.length > 0) {
+            const workbook = await generateExcelFile(products);
+
+            res.set("Content-Disposition", `attachment; filename=data-${Date.now().toString()}.xlsx`);
+            res.type("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return await workbook.xlsx.write(res);
+        }
+
+        res.status(404).json({
+            status: 'fail',
+            detail: 'No products to export.'
+        })
+
     } catch (err) {
         next(err);
     }

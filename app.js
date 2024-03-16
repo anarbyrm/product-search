@@ -11,8 +11,8 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json());
 app.use('/api/v1/products', productRoutes);
-
 app.use(errorHandler);
 
 connectDB(process.env.MONGO_DB_URI)
@@ -23,4 +23,4 @@ connectDB(process.env.MONGO_DB_URI)
     })
     .catch(err => {
         console.log(err);
-    })
+    });
