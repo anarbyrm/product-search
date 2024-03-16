@@ -1,5 +1,6 @@
 const { generateExcelFile } = require("../utils/excel");
 const Product = require("./models");
+const { DetailError, UserError } = require('../utils/error');
 
 const getProducts = async (req, res, next) => {
     try {
@@ -111,6 +112,10 @@ const exportProducts = async (req, res, next) => {
 
         const products = await Product.find(searchFilters);
 
+        if (!searchFilters || Object.keys(searchFilters).length < 1) {
+            throw new UserError('No filters exist');
+        }
+
         if (products.length > 0) {
             const workbook = await generateExcelFile(products);
 
@@ -119,10 +124,7 @@ const exportProducts = async (req, res, next) => {
             return await workbook.xlsx.write(res);
         }
 
-        res.status(404).json({
-            status: 'fail',
-            detail: 'No products to export.'
-        })
+        throw new DetailError(404, 'No products to be exported');
 
     } catch (err) {
         next(err);

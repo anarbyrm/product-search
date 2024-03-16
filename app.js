@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const productRoutes = require('./products/routes');
 const connectDB = require('./utils/db');
 const { errorHandler } = require('./utils/error');
+const swaggerDocs = require('./utils/swagger');
 
 dotenv.config();
 
@@ -13,6 +14,9 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use('/api/v1/products', productRoutes);
+
+swaggerDocs(app);
+
 app.use(errorHandler);
 
 connectDB(process.env.MONGO_DB_URI)
