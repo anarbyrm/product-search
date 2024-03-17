@@ -16,15 +16,19 @@ const productSchema = new mongoose.Schema({
     },
     sku: {
         type: String,
-        required: true
+        unique: true,
+        required: true,
+        index: true
     },
     barcode: {
         type: String,
+        unique: true,
         required: true,
         validate: {
             validator: (value) => value.length === 13,
             message: "Barcode must be 13 characters"
-        }
+        },
+        index: true
     },
     rating: {
         type: Number
