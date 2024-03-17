@@ -10,7 +10,9 @@ const validateBody = (req, res, next) => {
         "minPrice",
         "maxPrice",
         "minRating",
-        "maxRating" 
+        "maxRating",
+        "limit",
+        "offset"
     ];
 
     for (let key in req.body) {

@@ -73,7 +73,7 @@ const prepareQuery = (data) => {
         filters.category = category.trim();
     }
 
-    query = query.find(filters);
+    query = query.find(filters).lean();
 
     return query;
 }
