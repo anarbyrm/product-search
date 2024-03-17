@@ -5,7 +5,6 @@ built with: Node.js, Express.js, MongoDB, Redis
 
 ## Install packages
 
-NOTE: add .env file and add necessary environment variables into it.
 
 ```sh
 npm i
@@ -16,6 +15,8 @@ npm i
 ```sh
 docker run -p 6379:6379 -it redis/redis-stack-server:latest
 ```
+
+NOTE: add .env file and add necessary environment variables into it.
 
 ## Start server
 
