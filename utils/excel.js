@@ -22,13 +22,20 @@ exports.generateExcelFile = async (products) => {
 
     // filling rows with proper data
     const productRows = products.map((prod) => {
-        const data = { ...prod._doc };
+        let data;
+
+        if (prod instanceof Product) {
+            data = { ...prod._doc };
+        } else {
+            data = prod
+        }
+
         data.tags = data.tags.toString();
         data.price = data.price.toString();
         delete data._id;
         delete data.__v;
         return data;
-    }) 
+    })
 
     worksheet.addRows(productRows);
 

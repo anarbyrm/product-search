@@ -6,6 +6,7 @@ const productRoutes = require('./products/routes');
 const connectDB = require('./utils/db');
 const { errorHandler } = require('./utils/error');
 const swaggerDocs = require('./doc/swagger');
+const initiateRedisClient = require('./utils/redis');
 
 dotenv.config();
 

@@ -1,14 +1,13 @@
 const Product = require("./models");
+const { redisClient } = require("../utils/redis");
+
 
 const prepareQuery = (data) => {
-
     let { 
         q,
         stock,
         available,
         tags,
-        limit,
-        offset,
         minPrice, 
         maxPrice,
         minRating,
@@ -16,7 +15,7 @@ const prepareQuery = (data) => {
         category
     } = data;
 
-    query = Product.find();
+    let query = Product.find();
 
     // building search products query on:
     // title, description, category, sku, barcode
@@ -76,6 +75,12 @@ const prepareQuery = (data) => {
 
     query = query.find(filters);
 
+    return query;
+}
+
+
+const paginate = (query, limit, offset) => {
+
     // pagination - defaults to limit: 10, page: 1; max-limit: 100
     const MAX_LIMIT = 100;
     const DEFAULT_LIMIT = 10;
@@ -88,9 +93,43 @@ const prepareQuery = (data) => {
 
     query = query.limit(limit).skip(offset);
 
-    return query;
+    return {
+        query,
+        limit,
+        offset
+    }
+}
+
+const fetchProducts = async (properties) => {
+
+        let filteredQuery = prepareQuery(properties);
+
+        // pagination
+        let { limit: rawLimit, offset: rawOffset } = properties;
+        let { query, limit, offset } = paginate(filteredQuery, rawLimit, rawOffset);
+
+        // .getQuery() only includes filter query params,
+        // so pagination params have to be added to save
+        // whole params as a key and result as a value in cache.
+        const wholeParams = Object.assign({}, filteredQuery.getQuery(), { limit, offset });
+        const queryKey = JSON.stringify(wholeParams)
+
+        // check if key exists in cache if so return cached data.
+        const cachedValue = await redisClient.get(queryKey);
+
+        if (cachedValue) {
+            return JSON.parse(cachedValue);
+        }
+
+        // fetch products based on seach and filters
+        const products =  await query.exec();
+
+        // cache final result for 3 min = 180 sec
+        await redisClient.set(queryKey, JSON.stringify(products), 'EX', 180);
+
+        return products;
 }
 
 module.exports = {
-    prepareQuery
+    fetchProducts
 }

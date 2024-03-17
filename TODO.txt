@@ -1,0 +1,15 @@
+- [DONE] Build 2 REST API endpoint:
+    - [DONE] GET /products (product search)
+    - [DONE] POST /products/export (export products based on seach filters)
+
+- [DONE] Add middlewares:
+    - [DONE] Error handler
+    - [DONE] Body verifier
+
+- [DONE] Cache responses
+
+- Performance optimization (used loadlest to simulate concurrent requests):
+    - [DONE] Don't write blocking code
+    - [DONE] Use streams for exporting data
+    - [DONE] Implement pagination
+    - Optimize database queries, indexing
