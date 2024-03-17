@@ -28,8 +28,8 @@ const exportProducts = async (req, res, next) => {
         if (products.length > 0) {
             const workbook = await generateExcelFile(products);
 
-            res.set("Content-Disposition", `attachment; filename=data-${Date.now().toString()}.xlsx`);
-            res.type("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            res.set("Content-Disposition", `attachment; filename=data-${Date.now().toString()}.xls`);
+            res.type("application/vnd.ms-excel");
             return await workbook.xlsx.write(res);
         }
 

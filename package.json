@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "start:dev": "nodemon app.js",
+    "dev": "nodemon app.js",
+    "redis": "docker run --rm -p 6379:6379 -it --name cache redis/redis-stack-server:latest",
     "loadtest": "loadtest -n 1000 -c 100 http://localhost:5050/api/v1/products"
   },
   "keywords": [],
