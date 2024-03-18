@@ -32,38 +32,39 @@ const validateBody = (req, res, next) => {
 }
 
 
-const requests = {};
+const addresses = {};
 
 /**
  * Throttles requests for 5 request / min
  */
 const throttleRequest = (req, res, next) => {
-
     const requestLimit = 5;
     const requestInterval = 60000;  // 60000 milliseconds = 1 min
     const ip = req.ip;
 
     const now = Date.now();
 
-    if (!(ip in requests)) {
-        requests.ip = [];
+    if (!(ip in addresses)) {
+        addresses[ip] = [];
     }
+
+    currentAddress = addresses[ip];
 
     // Check if requested IP address contains elements
     // if so iterate through it and delete oldest request
     // if interval is reached.
-    while (requests.ip.length > 0 && requests.ip[0] < (now - requestInterval)) {
-        requests.ip.shift();
+    while (currentAddress.length > 0 && currentAddress[0] < (now - requestInterval)) {
+        currentAddress.shift();
     }
 
     // check if request is within limits if not return error for error handler
-    if (requests.ip.length >= requestLimit) {
+    if (currentAddress.length >= requestLimit) {
         const error = new DetailError(429, "Too many requests, please try again later.");
         return next(error);
     }
 
     // push current time to the end of list
-    requests.ip.push(now)
+    currentAddress.push(now)
 
     next();
 
