@@ -5,6 +5,7 @@
 - [DONE] Add middlewares:
     - [DONE] Error handler
     - [DONE] Body verifier
+    - [DONE] throttling middleware
 
 - [DONE] Cache responses
 
@@ -12,4 +13,4 @@
     - [DONE] Don't write blocking code
     - [DONE] Use streams for exporting data
     - [DONE] Implement pagination
-    - Optimize database queries, indexing
+    - [DONE] Optimize database queries, indexing
