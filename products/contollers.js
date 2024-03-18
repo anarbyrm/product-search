@@ -6,7 +6,7 @@ const { fetchProducts } = require("./services");
 const getProducts = async (req, res, next) => {
     try {
 
-        const products = await fetchProducts(req.query);
+        const products = JSON.parse(await fetchProducts(req.query));
 
         res.status(200).json({
             status: 'success',
@@ -23,7 +23,7 @@ const getProducts = async (req, res, next) => {
 const exportProducts = async (req, res, next) => {
     try {
 
-        const products = await fetchProducts(req.body);
+        const products = JSON.parse(await fetchProducts(req.body));
 
         if (products.length > 0) {
             const workbook = await generateExcelFile(products);

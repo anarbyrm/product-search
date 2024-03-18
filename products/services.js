@@ -118,14 +118,14 @@ const fetchProducts = async (properties) => {
         const cachedValue = await redisClient.get(queryKey);
 
         if (cachedValue) {
-            return JSON.parse(cachedValue);
+            return cachedValue;
         }
 
         // fetch products based on seach and filters
-        const products =  await query.exec();
+        let products = JSON.stringify(await query.exec());
 
         // cache final result for 3 min = 180 sec
-        await redisClient.set(queryKey, JSON.stringify(products), 'EX', 180);
+        await redisClient.set(queryKey, products, 'EX', 180);
 
         return products;
 }
