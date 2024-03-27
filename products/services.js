@@ -20,7 +20,7 @@ const prepareQuery = (data) => {
     // building search products query on:
     // title, description, category, sku, barcode
     if (q) {
-        query.find({
+        query = query.find({
             $or: [
                 { title: { $regex: q, $options: 'i' } },
                 { description: { $regex: q, $options: 'i' } },
